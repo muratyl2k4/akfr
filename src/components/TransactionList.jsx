@@ -104,7 +104,18 @@ export default function TransactionList({ transactions, onNewTransaction, onDele
               </tr>
             ) : (
               filteredTransactions.map((tx) => {
-                const isFee = tx.parent_transaction != null || tx.transaction_type === 'KESİNTİ VE EKLERİ' || tx.transaction_type === 'EFT KOMİSYONU' || tx.transaction_type === 'EFT BSMV' || tx.tag === 'Masraf' || tx.tag === 'Vergi';
+                const isFee = tx.parent_transaction != null ||
+                  tx.transaction_type === 'KESİNTİ VE EKLERİ' ||
+                  tx.transaction_type === 'EFT KOMİSYONU' ||
+                  tx.transaction_type === 'EFT BSMV' ||
+                  (tx.transaction_type && tx.transaction_type.toUpperCase().includes('KOMİSYON')) ||
+                  (tx.transaction_type && tx.transaction_type.toUpperCase().includes('BSMV')) ||
+                  (tx.transaction_type && tx.transaction_type.toUpperCase().includes('KESİNTİ')) ||
+                  (tx.description && tx.description.toUpperCase().includes('KESİNTİ')) ||
+                  (tx.description && tx.description.toUpperCase().includes('KOMISYON')) ||
+                  (tx.description && tx.description.toUpperCase().includes('VERGI')) ||
+                  tx.tag === 'Masraf' ||
+                  tx.tag === 'Vergi';
                 const isBsmv = tx.transaction_type === 'EFT BSMV' || tx.tag === 'Vergi';
                 const isComm = tx.transaction_type === 'EFT KOMİSYONU' || tx.tag === 'Masraf';
                 const isFormattedOutgoing = !tx.is_credit && tx.description && /^\d{3,}-\S+/.test(tx.description);
@@ -197,35 +208,39 @@ export default function TransactionList({ transactions, onNewTransaction, onDele
 
                     {/* Dekont Butonları */}
                     <td style={{ textAlign: 'center', whiteSpace: 'nowrap' }}>
-                      <div style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-                        <button
-                          onClick={() => onEditReceipt && onEditReceipt(tx)}
-                          className="btn btn-receipt"
-                          title="Dekont Bilgilerini Düzenle"
-                          style={{ backgroundColor: '#f3f4f6', color: '#1f2937', borderColor: '#d1d5db' }}
-                        >
-                          <FileEdit size={13} />
-                          Düzenle
-                        </button>
-                        <button
-                          onClick={() => downloadReceiptPdf(tx.id, `Akbank_Dekont_${tx.receipt_serial_no || tx.id}.pdf`)}
-                          className="btn btn-receipt"
-                          title="Birebir Orijinal Akbank Dekontunu PDF Olarak İndir"
-                        >
-                          <Download size={13} />
-                          Dekont (PDF)
-                        </button>
-                        <a
-                          href={getReceiptPdfUrl(tx.id)}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="btn btn-receipt"
-                          title="Yeni Sekmede Aç"
-                          style={{ padding: '0.35rem 0.45rem' }}
-                        >
-                          <ExternalLink size={13} />
-                        </a>
-                      </div>
+                      {!isFee ? (
+                        <div style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                          <button
+                            onClick={() => onEditReceipt && onEditReceipt(tx)}
+                            className="btn btn-receipt"
+                            title="Dekont Bilgilerini Düzenle"
+                            style={{ backgroundColor: '#f3f4f6', color: '#1f2937', borderColor: '#d1d5db' }}
+                          >
+                            <FileEdit size={13} />
+                            Düzenle
+                          </button>
+                          <button
+                            onClick={() => downloadReceiptPdf(tx.id, `Akbank_Dekont_${tx.receipt_serial_no || tx.id}.pdf`)}
+                            className="btn btn-receipt"
+                            title="Birebir Orijinal Akbank Dekontunu PDF Olarak İndir"
+                          >
+                            <Download size={13} />
+                            Dekont (PDF)
+                          </button>
+                          <a
+                            href={getReceiptPdfUrl(tx.id)}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="btn btn-receipt"
+                            title="Yeni Sekmede Aç"
+                            style={{ padding: '0.35rem 0.45rem' }}
+                          >
+                            <ExternalLink size={13} />
+                          </a>
+                        </div>
+                      ) : (
+                        <span style={{ color: 'var(--akbank-text-muted)', fontSize: '0.85rem' }}>-</span>
+                      )}
                     </td>
 
                     {/* Sil Butonu */}
