@@ -7,7 +7,7 @@ export default function Header({ currentUser, onLogout, onNewCustomer }) {
       <div className="header-container">
         <div className="brand-section">
           <Building2 size={28} />
-          <span className="brand-title">AKBANK</span>
+          <span className="brand-title">LAZ(MKA)</span>
           <span className="brand-subtitle">Direkt İnternet Bankacılığı</span>
         </div>
 
