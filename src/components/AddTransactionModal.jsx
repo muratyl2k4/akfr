@@ -21,10 +21,10 @@ export default function AddTransactionModal({ customer, isOpen, onClose, onCreat
     bank_code: defaultBank.code,
     bank_name: defaultBank.official_name,
     receiver_branch: '-',
-    reference_no: '000654698',
-    commission: '7.97',
-    bsmv: '0.40',
-    sch_amount: '1.00',
+    reference_no: String(Math.floor(100000000 + Math.random() * 900000000)),
+    commission: '15.96',
+    bsmv: '0.80',
+    sch_amount: '0.00',
     transaction_date: todayStr,
     transaction_time: timeStr,
     description: '',
@@ -347,20 +347,9 @@ export default function AddTransactionModal({ customer, isOpen, onClose, onCreat
                 <span style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', color: 'var(--akbank-red)', display: 'block', marginBottom: '8px' }}>
                   Orijinal Akbank Kesintileri
                 </span>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '8px' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
                   <div className="form-group">
-                    <label className="form-label" style={{ fontSize: '0.75rem' }}>ŞCH (TL)</label>
-                    <input
-                      type="number"
-                      step="0.01"
-                      name="sch_amount"
-                      value={formData.sch_amount}
-                      onChange={handleChange}
-                      className="form-input"
-                    />
-                  </div>
-                  <div className="form-group">
-                    <label className="form-label" style={{ fontSize: '0.75rem' }}>EFT Komisyon</label>
+                    <label className="form-label" style={{ fontSize: '0.75rem' }}>EFT Komisyon (TL)</label>
                     <input
                       type="number"
                       step="0.01"
@@ -371,7 +360,7 @@ export default function AddTransactionModal({ customer, isOpen, onClose, onCreat
                     />
                   </div>
                   <div className="form-group">
-                    <label className="form-label" style={{ fontSize: '0.75rem' }}>EFT BSMV</label>
+                    <label className="form-label" style={{ fontSize: '0.75rem' }}>EFT BSMV (TL)</label>
                     <input
                       type="number"
                       step="0.01"

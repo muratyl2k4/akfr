@@ -41,13 +41,13 @@ export default function EditReceiptModal({ isOpen, onClose, transaction, onSave 
     amount: transaction.amount ? String(transaction.amount) : '0.00',
     is_credit: Boolean(transaction.is_credit),
     transaction_type: transaction.transaction_type || 'EFT BANKALAR ARASI HESABA HAVALE',
-    sch_amount: transaction.sch_amount != null ? String(transaction.sch_amount) : '1.00',
-    commission: transaction.commission != null ? String(transaction.commission) : '7.97',
-    bsmv: transaction.bsmv != null ? String(transaction.bsmv) : '0.40',
+    sch_amount: '0.00',
+    commission: transaction.commission != null && Number(transaction.commission) > 0 ? String(transaction.commission) : '15.96',
+    bsmv: transaction.bsmv != null && Number(transaction.bsmv) > 0 ? String(transaction.bsmv) : '0.80',
     transaction_date: transaction.transaction_date || '',
     transaction_time: transaction.transaction_time || '',
     valor_date: transaction.valor_date || transaction.transaction_date || '',
-    reference_no: transaction.reference_no || '000654698',
+    reference_no: transaction.reference_no || String(Math.floor(100000000 + Math.random() * 900000000)),
     receiver_name: transaction.receiver_name || '',
     receiver_iban: transaction.receiver_iban || 'TR',
     bank_code: transaction.bank_code || initialBank.code,
@@ -75,13 +75,13 @@ export default function EditReceiptModal({ isOpen, onClose, transaction, onSave 
         amount: transaction.amount ? String(transaction.amount) : '0.00',
         is_credit: Boolean(transaction.is_credit),
         transaction_type: transaction.transaction_type || 'EFT BANKALAR ARASI HESABA HAVALE',
-        sch_amount: transaction.sch_amount != null ? String(transaction.sch_amount) : '1.00',
-        commission: transaction.commission != null ? String(transaction.commission) : '7.97',
-        bsmv: transaction.bsmv != null ? String(transaction.bsmv) : '0.40',
+        sch_amount: '0.00',
+        commission: transaction.commission != null && Number(transaction.commission) > 0 ? String(transaction.commission) : '15.96',
+        bsmv: transaction.bsmv != null && Number(transaction.bsmv) > 0 ? String(transaction.bsmv) : '0.80',
         transaction_date: transaction.transaction_date || '',
         transaction_time: transaction.transaction_time || '',
         valor_date: transaction.valor_date || transaction.transaction_date || '',
-        reference_no: transaction.reference_no || '000654698',
+        reference_no: transaction.reference_no || String(Math.floor(100000000 + Math.random() * 900000000)),
         receiver_name: transaction.receiver_name || '',
         receiver_iban: transaction.receiver_iban || 'TR',
         bank_code: transaction.bank_code || b.code,
@@ -108,10 +108,9 @@ export default function EditReceiptModal({ isOpen, onClose, transaction, onSave 
 
   // Tutar Hesaplamaları
   const baseAmt = parseFloat(formData.amount) || 0;
-  const schAmt = parseFloat(formData.sch_amount) || 0;
   const commAmt = parseFloat(formData.commission) || 0;
   const bsmvAmt = parseFloat(formData.bsmv) || 0;
-  const grandTotal = baseAmt + schAmt + commAmt + bsmvAmt;
+  const grandTotal = baseAmt + commAmt + bsmvAmt;
 
   const formatTrCurrency = (val) => {
     return Number(val || 0).toLocaleString('tr-TR', {
@@ -363,19 +362,6 @@ export default function EditReceiptModal({ isOpen, onClose, transaction, onSave 
                   </div>
 
                   <div className="form-group">
-                    <label className="form-label">ŞCH Tutarı (TL)</label>
-                    <input
-                      type="number"
-                      step="0.01"
-                      name="sch_amount"
-                      value={formData.sch_amount}
-                      onChange={handleChange}
-                      className="form-input"
-                      placeholder="1.00"
-                    />
-                  </div>
-
-                  <div className="form-group">
                     <label className="form-label">GECEFT / FAST Komisyon (TL)</label>
                     <input
                       type="number"
@@ -384,7 +370,7 @@ export default function EditReceiptModal({ isOpen, onClose, transaction, onSave 
                       value={formData.commission}
                       onChange={handleChange}
                       className="form-input"
-                      placeholder="7.97"
+                      placeholder="15.96"
                     />
                   </div>
 
@@ -397,7 +383,7 @@ export default function EditReceiptModal({ isOpen, onClose, transaction, onSave 
                       value={formData.bsmv}
                       onChange={handleChange}
                       className="form-input"
-                      placeholder="0.40"
+                      placeholder="0.80"
                     />
                   </div>
                 </div>
@@ -418,7 +404,7 @@ export default function EditReceiptModal({ isOpen, onClose, transaction, onSave 
                   <div style={{ fontSize: '0.82rem', color: '#374151' }}>
                     <span style={{ fontWeight: 600 }}>Dekonta Basılacak TOPLAM:</span>{' '}
                     <span style={{ color: '#6b7280' }}>
-                      ({formatTrCurrency(baseAmt)} + {formatTrCurrency(schAmt)} + {formatTrCurrency(commAmt)} + {formatTrCurrency(bsmvAmt)} TL)
+                      ({formatTrCurrency(baseAmt)} + {formatTrCurrency(commAmt)} + {formatTrCurrency(bsmvAmt)} TL)
                     </span>
                   </div>
                   <div style={{ fontSize: '1.05rem', fontWeight: 800, color: 'var(--akbank-red)' }}>
